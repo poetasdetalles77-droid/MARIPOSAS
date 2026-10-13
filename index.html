@@ -1,0 +1,233 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Mariposas 🦋💗</title>
+
+  <link rel="stylesheet" href="./style.css">
+
+  <style>
+   
+    #mariposaMusica {
+      display: inline-block;
+      position: relative;
+      z-index: 10001;
+      cursor: pointer;
+      pointer-events: auto;
+      transition: transform 0.3s ease;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    #mariposaMusica:hover {
+      transform: scale(1.3) rotate(-10deg);
+    }
+
+  
+    #carta {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      background: rgba(20, 5, 30, 0.82);
+      justify-content: center;
+      align-items: center;
+      padding: 18px;
+      box-sizing: border-box;
+    }
+
+    #carta.abierta {
+      display: flex;
+    }
+
+  
+    .carta-contenido {
+      position: relative;
+      width: 100%;
+      max-width: 380px;
+      max-height: 85vh;
+      overflow-y: auto;
+      box-sizing: border-box;
+      padding: 35px 24px;
+      border: 3px solid #f3b5d5;
+      border-radius: 22px;
+      background: #fff8fc;
+      color: #653452;
+      text-align: center;
+      box-shadow: 0 0 35px rgba(255, 150, 210, 0.45);
+      animation: aparecerCarta 0.45s ease;
+    }
+
+    .carta-contenido h2 {
+      color: #d63384;
+      font-size: 23px;
+      margin: 18px 0;
+    }
+
+    .carta-contenido p {
+      font-family: Georgia, serif;
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    .adornos-carta {
+      font-size: 27px;
+      margin: 10px 0;
+    }
+
+    
+    #cerrarCarta {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 35px;
+      height: 35px;
+      border: none;
+      border-radius: 50%;
+      background: #f8d7e8;
+      color: #8e245c;
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+    @keyframes aparecerCarta {
+      from {
+        opacity: 0;
+        transform: scale(0.75) translateY(15px);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .carta-contenido {
+        max-width: 340px;
+        padding: 32px 20px;
+      }
+
+      .carta-contenido h2 {
+        font-size: 21px;
+      }
+
+      .carta-contenido p {
+        font-size: 15px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+
+  <div id="app">
+    <div id="hero">
+
+      <h1>
+        <span
+          id="mariposaMusica"
+          role="button"
+          tabindex="0"
+          aria-label="Abrir carta y reproducir música">🦋</span>
+        <br>
+        Mariposas
+      </h1>
+
+      
+
+      <h6>Toque la mariposa para abrir su cartita 💌</h6>
+<h7>arrastra, zoom y deslizar soportandolo</h7>
+    </div>
+  </div>
+
+
+  <div id="carta" role="dialog" aria-modal="true"
+       aria-labelledby="tituloCarta">
+
+    <div class="carta-contenido">
+
+      <button id="cerrarCarta" aria-label="Cerrar carta">✖</button>
+
+      <div class="adornos-carta">🦋 🌷 🦋</div>
+
+      <h2 id="tituloCarta">Para usted  💗</h2>
+
+      <p>
+     "❤️le dedico estas mariposas, 🦋✨
+      </p>
+
+      <div class="adornos-carta">
+        Con mucho cariño 💌
+      </div>
+
+    </div>
+  </div>
+
+ 
+  <audio id="musica" loop preload="auto">
+    <source src="./hola.mp3" type="audio/mpeg">
+    Tu navegador no soporta audio.
+  </audio>
+
+ 
+  <script type="module" src="./script.js"></script>
+
+  
+  <script>
+    (() => {
+      const mariposa = document.getElementById("mariposaMusica");
+      const musica = document.getElementById("musica");
+      const carta = document.getElementById("carta");
+      const cerrar = document.getElementById("cerrarCarta");
+
+      function abrirDetalle(event) {
+        if (event) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+
+        carta.classList.add("abierta");
+
+        
+        if (musica.paused) {
+          musica.play().catch((error) => {
+            console.error("No se pudo reproducir la música:", error);
+          });
+        }
+      }
+
+      function cerrarDetalle() {
+        carta.classList.remove("abierta");
+      }
+
+      mariposa.addEventListener("click", abrirDetalle);
+
+      mariposa.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          abrirDetalle(event);
+        }
+      });
+
+      cerrar.addEventListener("click", cerrarDetalle);
+
+      carta.addEventListener("click", (event) => {
+        if (event.target === carta) {
+          cerrarDetalle();
+        }
+      });
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+          cerrarDetalle();
+        }
+      });
+    })();
+  </script>
+
+</body>
+</html>
